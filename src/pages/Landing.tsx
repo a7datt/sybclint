@@ -53,7 +53,7 @@ export default function Landing() {
         <div className="flex items-center justify-center mb-10">
           <div className="flex flex-col items-center gap-2 bg-gray-50 border border-gray-200 rounded-2xl px-8 py-5 shadow-sm">
             <img src="https://i.ibb.co/sSsmypR/image.jpg" alt="شام كاش - خدمة التحويلات المالية في سوريا" className="h-12 object-contain rounded-lg" />
-            <span className="text-sm text-gray-500 font-medium">مدعوم رسمياً بـ شام كاش</span>
+            <span className="text-sm text-gray-500 font-medium"> المحفظة المدعومة -شام كاش</span>
           </div>
         </div>
 
