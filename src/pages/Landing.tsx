@@ -119,7 +119,7 @@ export default function Landing() {
                 <MapPin className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
                 <div>
                   <div className="font-bold text-gray-800 text-sm mb-1">موقعنا الجغرافي</div>
-                  <div className="text-gray-600 text-sm">سوريا / حمص / تلبيسة</div>
+                  <div className="text-gray-600 text-sm">سوريا / حمص / </div>
                 </div>
               </div>
               <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-start gap-3">
@@ -154,10 +154,10 @@ export default function Landing() {
                 واتساب شخصي
               </a>
               <a
-                href="https://chat.whatsapp.com/DELXtdEh9ua5edFTupESNU"
+                href="https://whatsapp.com/channel/0029Vb7bKOWLY6d7CGPwx22s"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="مجتمع واتساب - SYB API"
+                aria-label=" قناة الوتساب- SYB API"
                 className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl px-4 py-3 font-medium text-sm transition-colors"
               >
                 <Users className="w-4 h-4" />
