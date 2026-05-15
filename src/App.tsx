@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Landing from './pages/Landing';
@@ -17,6 +17,7 @@ import Deposit from './pages/Deposit';
 import Subscription from './pages/Subscription';
 import ApiKeys from './pages/ApiKeys';
 import Docs from './pages/Docs';
+import { silentRefresh } from './lib/api';
 
 class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean}> {
   constructor(props: {children: React.ReactNode}) {
@@ -32,9 +33,61 @@ class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasErr
   }
 }
 
+// ─────────────────────────────────────────────
+// ProtectedRoute — smart session guard
+//
+// Problem: The access token lives 15 minutes. When the user returns after
+// hours/days, the token in localStorage is expired. A plain token-existence
+// check lets them "in" but every API call immediately fails with 401,
+// causing "فشل جلب الحسابات / فشل جلب البيانات".
+//
+// Fix: Before rendering any protected page we call silentRefresh() which:
+//   1. Checks if the stored token is still valid (>1 min left) → proceed.
+//   2. If expired → calls /api/auth/refresh using the HttpOnly refresh cookie
+//      (valid 7 days) → gets a fresh access token → proceed.
+//   3. If refresh also fails (cookie expired/revoked) → redirect to /login.
+//
+// While the check is running we show nothing (or a tiny spinner) to avoid
+// a flash of the dashboard with stale data.
+// ─────────────────────────────────────────────
+type AuthState = 'checking' | 'authenticated' | 'unauthenticated';
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const token = localStorage.getItem('token');
-  if (!token) return <Navigate to="/login" replace />;
+  const [authState, setAuthState] = useState<AuthState>('checking');
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setAuthState('unauthenticated');
+      return;
+    }
+
+    // Always attempt a silent refresh on mount so a returning user gets a
+    // fresh token even if the tab was closed for hours.
+    silentRefresh().then((valid) => {
+      if (!cancelled) {
+        setAuthState(valid ? 'authenticated' : 'unauthenticated');
+      }
+    });
+
+    return () => { cancelled = true; };
+  }, []);
+
+  if (authState === 'checking') {
+    // Minimal loading state — avoids flashing protected content or login page
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (authState === 'unauthenticated') {
+    return <Navigate to="/login" replace />;
+  }
+
   return <>{children}</>;
 }
 
