@@ -70,7 +70,55 @@ export function setupCronJobs() {
     }
   });
 
-  // ─── Cleanup expired/revoked refresh tokens — every 6 hours ──
+  // ─── Expire pending invoices — every minute ──
+  cron.schedule('* * * * *', async () => {
+    try {
+      const now = new Date().toISOString();
+
+      // Fetch expired pending invoices
+      const { data: expiredInvoices } = await supabase
+        .from('invoices')
+        .select('id, webhook_url, identifier, amount, currency')
+        .eq('status', 'pending')
+        .lt('expires_at', now);
+
+      if (!expiredInvoices || expiredInvoices.length === 0) return;
+
+      // Mark them expired
+      const ids = expiredInvoices.map((inv: any) => inv.id);
+      await supabase
+        .from('invoices')
+        .update({ status: 'expired', updated_at: now })
+        .in('id', ids);
+
+      // Send webhooks
+      for (const inv of expiredInvoices) {
+        if (!inv.webhook_url) continue;
+        try {
+          await fetch(inv.webhook_url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event: 'invoice.expired',
+              invoiceId: inv.id,
+              method: 'shamcash',
+              identifier: inv.identifier,
+              amount: inv.amount,
+              currency: inv.currency,
+              expiredAt: now,
+            }),
+          });
+        } catch (e) {
+          // Non-fatal: webhook failure doesn't block expiry
+          console.warn(`[Cron] Invoice webhook failed for ${inv.id}`);
+        }
+      }
+
+      console.log(`[Cron] Expired ${ids.length} invoice(s)`);
+    } catch (e: any) {
+      console.error('[Cron] Invoice expiry error:', e.message);
+    }
+  });
   // SECURITY: Prevent refresh_tokens table from growing unboundedly
   cron.schedule('0 */6 * * *', async () => {
     try {
