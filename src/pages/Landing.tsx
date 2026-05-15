@@ -125,7 +125,7 @@ export default function Landing() {
                 <span className="text-xl mt-0.5">👨‍💻</span>
                 <div>
                   <div className="font-bold text-gray-800 text-sm mb-1">المطوّر</div>
-                  <div className="text-gray-600 text-sm">أحمد عتون</div>
+                  <div className="text-gray-600 text-sm">SYB</div>
                 </div>
               </div>
             </div>
