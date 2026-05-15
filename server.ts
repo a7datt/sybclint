@@ -9,6 +9,7 @@ import authRoutes from './src/server/routes/auth.js';
 import googleAuthRoutes from './src/server/routes/google_auth.js';
 import dashboardRoutes from './src/server/routes/dashboard.js';
 import externalApiRoutes from './src/server/routes/external_api.js';
+import invoiceRoutes from './src/server/routes/invoices.js';
 import { setupCronJobs } from './src/server/cron.js';
 import { globalApiRateLimiter } from './src/server/middleware.js';
 
@@ -120,6 +121,7 @@ async function startServer() {
   app.use('/api/auth/google', googleAuthRoutes);
   app.use('/api/dashboard', dashboardRoutes);
   app.use('/api/v1', externalApiRoutes);
+  app.use('/api/v1/invoices', invoiceRoutes);
 
   app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.error('[Global Error]', err.message || err);
