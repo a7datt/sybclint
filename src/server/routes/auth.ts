@@ -35,7 +35,7 @@ const loginSchema = z.object({
 // ─────────────────────────────────────────────
 // Token generation
 // SECURITY: Access token is short-lived (15 min) to limit blast radius if stolen.
-// Refresh token is 7 days and rotated on each use.
+// Refresh token is 30 days and rotated on each use.
 // ─────────────────────────────────────────────
 function generateTokens(userId: string, email: string) {
   const accessToken = jwt.sign(
@@ -46,7 +46,7 @@ function generateTokens(userId: string, email: string) {
   const refreshToken = jwt.sign(
     { id: userId },
     JWT_REFRESH_SECRET!,
-    { expiresIn: '7d' }
+    { expiresIn: '30d' }
   );
   return { accessToken, refreshToken };
 }
@@ -54,7 +54,7 @@ function generateTokens(userId: string, email: string) {
 // Save refresh token hash (never store plain tokens)
 async function saveRefreshToken(userId: string, token: string): Promise<void> {
   const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
   await supabase.from('refresh_tokens').insert({
     user_id: userId,
     token_hash: tokenHash,
@@ -212,7 +212,7 @@ router.post('/register', otpSendRateLimiter, async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
       path: '/api/auth',
     });
 
@@ -349,7 +349,7 @@ router.post('/login', loginRateLimiter, async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
       path: '/api/auth',
     });
 
@@ -416,7 +416,7 @@ router.post('/refresh', async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
       path: '/api/auth',
     });
 

@@ -26,13 +26,13 @@ function getRedirectUri(req: express.Request) {
 // SECURITY: Access token short-lived (15 min), refresh token 7 days with rotation
 function generateTokens(userId: string, email: string) {
   const accessToken = jwt.sign({ id: userId, email }, JWT_SECRET, { expiresIn: '15m' });
-  const refreshToken = jwt.sign({ id: userId }, JWT_REFRESH_SECRET, { expiresIn: '7d' });
+  const refreshToken = jwt.sign({ id: userId }, JWT_REFRESH_SECRET, { expiresIn: '30d' });
   return { accessToken, refreshToken };
 }
 
 async function saveRefreshToken(userId: string, token: string): Promise<void> {
   const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
   await supabase.from('refresh_tokens').insert({
     user_id: userId,
     token_hash: tokenHash,
@@ -246,7 +246,7 @@ router.get('/callback', async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in ms
       path: '/api/auth',
     });
 
