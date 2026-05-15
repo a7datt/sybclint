@@ -66,13 +66,12 @@ export default function Landing() {
             ابدأ الآن مجاناً
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <Link
-            to="/docs"
-            className="flex items-center justify-center gap-2 border-2 border-primary text-primary px-8 py-3.5 rounded-xl text-base md:text-lg font-bold hover:bg-blue-50 transition-all"
-          >
-            <Code2 className="w-5 h-5" />
-            عرض التوثيق
-          </Link>
+        </div>
+
+        {/* Free Trial Notice */}
+        <div className="flex items-center justify-center gap-2 bg-yellow-50 border border-yellow-200 text-yellow-800 px-5 py-3 rounded-xl text-sm font-medium mb-6">
+          <span className="text-lg">🎁</span>
+          <span>كل حساب جديد يحصل على <strong>فترة مجانية مدة 24 ساعة</strong> — جرّب الخدمة بدون أي تكلفة!</span>
         </div>
 
         {/* ===== Features Section ===== */}
