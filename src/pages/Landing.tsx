@@ -142,16 +142,7 @@ export default function Landing() {
                 <MessageCircle className="w-4 h-4" />
                 واتساب الأعمال
               </a>
-              <a
-                href="https://wa.me/963982559890"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="واتساب شخصي - أحمد عتون"
-                className="flex items-center justify-center gap-2 bg-green-400 hover:bg-green-500 text-white rounded-xl px-4 py-3 font-medium text-sm transition-colors"
-              >
-                <MessageCircle className="w-4 h-4" />
-                واتساب شخصي
-              </a>
+              
               <a
                 href="https://whatsapp.com/channel/0029Vb7bKOWLY6d7CGPwx22s"
                 target="_blank"
