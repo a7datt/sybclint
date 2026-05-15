@@ -694,10 +694,6 @@ export default function Docs() {
               </tbody>
             </table>
           </div>
-
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
-            <span className="font-bold">ملاحظة أمان:</span> إذا أضفت <span className="font-mono bg-amber-100 px-1 rounded">WEBHOOK_SECRET</span> في بيئة الخادم، سيتم إرسال ترويسة <span className="font-mono bg-amber-100 px-1 rounded" dir="ltr">X-Webhook-Signature: sha256=...</span> مع كل إشعار للتحقق من صحة المصدر.
-          </div>
         </div>
       </div>
 
