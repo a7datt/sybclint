@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShieldCheck, MapPin, MessageCircle, Users, Zap, Lock, Code2, ArrowRight } from 'lucide-react';
+import { ShieldCheck, MapPin, MessageCircle, Users, Zap, Lock, Code2, ArrowRight, Globe } from 'lucide-react';
 
 import { Logo } from '../components/Logo';
 
@@ -142,7 +142,17 @@ export default function Landing() {
                 <MessageCircle className="w-4 h-4" />
                 واتساب الأعمال
               </a>
-              
+              <a
+  href="https://syriabit.onrender.com"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="موقعنا الإلكتروني"
+  className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white transition-colors bg-indigo-500 rounded-xl hover:bg-indigo-600"
+>
+  <Globe className="w-4 h-4" />
+  موقعنا الإلكتروني
+</a>
+
               <a
                 href="https://whatsapp.com/channel/0029Vb7bKOWLY6d7CGPwx22s"
                 target="_blank"
