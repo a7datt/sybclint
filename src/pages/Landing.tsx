@@ -161,7 +161,7 @@ export default function Landing() {
                 className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl px-4 py-3 font-medium text-sm transition-colors"
               >
                 <Users className="w-4 h-4" />
-                مجتمع واتساب
+                قناة واتساب
               </a>
             </div>
 
